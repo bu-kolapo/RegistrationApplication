@@ -18,27 +18,27 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Registration  registerUser(RegistrationRequest registrationRequest) {
-        validateAge(registrationRequest.dateOfBirth());
-        validateCorporateEmail(registrationRequest.email());
+        validateAge(registrationRequest.getDateOfBirth());
+        validateCorporateEmail(registrationRequest.getEmail());
 
-        Registration registration=new Registration();
-        registration.setFirstName(registrationRequest.firstName());
-        registration.setLastName(registrationRequest.lastName());
-        registration.setPassword(registrationRequest.password());
-        registration.setDateOfBirth(registrationRequest.dateOfBirth());
-        registration.setEmail(registrationRequest.email());
+        Registration registration = new Registration(
+                registrationRequest.getEmail(),
+                registrationRequest.getFirstName(),
+                registrationRequest.getLastName(),
+                registrationRequest.getPassword(),
+                registrationRequest.getDateOfBirth()
+        );
 
         // Persist user (stubbed)
-        log.info("User [{} {}] registered with email [{}]", registrationRequest.firstName());
+        log.info("User [{} {}] registered with email [{}]", registrationRequest.getEmail());
 
         // Generate random transactions
         generateTransactions( 200);
 
         // Send email (stubbed with logging)
-        log.info("Sent registration email to {}", registrationRequest.email());
+        log.info("Sent registration email to {}", registrationRequest.getEmail());
         return registration;
     }
-
     private void validateAge(LocalDate dob) {
         if (Period.between(dob, LocalDate.now()).getYears() < 18) {
             throw new IllegalArgumentException("User must be at least 18 years old.");
